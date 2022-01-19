@@ -1,15 +1,18 @@
 const path = require('path')
 
 function getMessages(req, res) {
-  const imgPath = path.join(
-    __dirname,
-    '..',
-    'public',
-    'images',
-    'cricket-stumps-batsman.jpg',
-  )
-  res.sendFile(imgPath)
-
+  res.render('messages', {
+    title: 'Our first User: ',
+    person: 'Mr Great',
+  })
+  // const imgPath = path.join(
+  //   __dirname,
+  //   '..',
+  //   'public',
+  //   'images',
+  //   'cricket-stumps-batsman.jpg',
+  // )
+  // res.sendFile(imgPath)
   // res
   //   .status(200)
   //   .send(

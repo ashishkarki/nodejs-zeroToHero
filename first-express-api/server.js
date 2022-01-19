@@ -9,6 +9,10 @@ const path = require('path')
 const serverStart = () => {
   const app = express()
 
+  // set view engine
+  app.set('view engine', 'hbs')
+  app.set('views', path.join(__dirname, 'views'))
+
   // middlewares
   app.use((req, res, next) => timeLoggerMiddleware(req, res, next, 'server.js'))
 
@@ -16,11 +20,13 @@ const serverStart = () => {
   app.use('/site', express.static(publicPath))
   app.use(express.json())
 
-  // paths
   app.get('/', (_req, res) => {
-    res.send('First Express API is working correctly...')
+    res.render('index', {
+      title: 'My first Node Express App',
+      caption: 'Showing image as content of this app:',
+    })
   })
-
+  // paths
   // api for people
   app.use(URI_PATHS.PEOPLE, peopleRouter)
 

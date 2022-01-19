@@ -4,6 +4,8 @@ const EXPRESS_PORT = process.env.PORT || 5001
 
 const HOW_MANY_RANDOM_PEOPLE = 5
 
+const STATIC_SITE_ROOT = '/site'
+
 const URI_PATHS = {
   PEOPLE: '/people',
   MESSAGES: '/messages',
