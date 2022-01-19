@@ -5,8 +5,9 @@ const EXPRESS_PORT = process.env.PORT || 5001
 const HOW_MANY_RANDOM_PEOPLE = 5
 
 const URI_PATHS = {
-  people: '/people',
-  messages: '/messages',
+  PEOPLE: '/people',
+  MESSAGES: '/messages',
+  PUBLIC: './public',
 }
 
 const generateRandomPeople = (howMany = HOW_MANY_RANDOM_PEOPLE) => {
