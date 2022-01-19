@@ -1,25 +1,15 @@
 const express = require('express')
-const { EXPRESS_PORT } = require('./constants')
+const { EXPRESS_PORT, URI_PATHS } = require('./constants')
 
-const peopleController = require('./controllers/people.controller')
-const messagesController = require('./controllers/messages.controller')
-const { application } = require('express')
+const timeLoggerMiddleware = require('./middlewares/timeLogger.middleware')
+const peopleRouter = require('./routes/people.router')
+const messagesRouter = require('./routes/messages.router')
 
 const serverStart = () => {
   const app = express()
 
   // middlewares
-  app.use((req, res, next) => {
-    const start = Date.now()
-    console.time('Request')
-
-    console.log(`method: ${req.method} - url: ${req.url}`)
-    next()
-
-    const end = Date.now()
-    console.timeEnd('Request')
-    console.log(`time spent: ${end - start}ms`)
-  })
+  app.use((req, res, next) => timeLoggerMiddleware(req, res, next, 'server.js'))
 
   app.use(express.json())
 
@@ -29,13 +19,10 @@ const serverStart = () => {
   })
 
   // api for people
-  app.get('/people', peopleController.getPeople)
-  app.get('/people/:personId', peopleController.getPersonById)
-  app.post('/people', peopleController.postPerson)
+  app.use(URI_PATHS.people, peopleRouter)
 
   // api for messages
-  app.get('/messages', messagesController.getMessages)
-  app.post('/messages', messagesController.postMessage)
+  app.use(URI_PATHS.messages, messagesRouter)
 
   // listener
   app.listen(EXPRESS_PORT, () => {

@@ -4,6 +4,11 @@ const EXPRESS_PORT = process.env.PORT || 5001
 
 const HOW_MANY_RANDOM_PEOPLE = 5
 
+const URI_PATHS = {
+  people: '/people',
+  messages: '/messages',
+}
+
 const generateRandomPeople = (howMany = HOW_MANY_RANDOM_PEOPLE) => {
   const people = []
 
@@ -20,5 +25,6 @@ const generateRandomPeople = (howMany = HOW_MANY_RANDOM_PEOPLE) => {
 
 module.exports = {
   EXPRESS_PORT,
+  URI_PATHS,
   generateRandomPeople,
 }
