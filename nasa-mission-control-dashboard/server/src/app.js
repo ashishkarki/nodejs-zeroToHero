@@ -7,7 +7,7 @@ const { logger } = require('./constants')
 
 // the app
 const app = express()
-logger(`app.js => Express app: ${app}`)
+// logger(`app.js => Express app: ${app}`)
 
 // middlwares
 app.use(
