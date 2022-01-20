@@ -4,9 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "install": "npm i --prefix server && npm i --prefix client",
+    "server": "npm run dev --prefix server",
+    "client": "npm start --prefix client",
+    "dev": "npm run server & npm run client",
+    "test": "npm run test --prefix server && npm run test --prefix client"
   },
-  "keywords": [],
+  "keywords": ["full-stack", "node", "backend", "api"],
   "author": "",
   "license": "ISC"
 }
