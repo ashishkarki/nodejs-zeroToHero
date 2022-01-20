@@ -1,0 +1,4 @@
+*/**/node_modules
+
+# ignore whole client folder as it is sourced and not important for this backend focused project
+client
