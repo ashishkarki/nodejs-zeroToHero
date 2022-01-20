@@ -1,9 +1,9 @@
-const { logger } = require('../constants')
-
 const launchesMap = new Map()
 
+let currentFlightNumber = 100
+
 const launch = {
-  flightNumber: 199,
+  flightNumber: currentFlightNumber,
   mission: 'Kepler Explorer',
   rocket: 'Explorer IS1',
   launchDate: new Date('Dec 30, 2023'),
@@ -15,14 +15,34 @@ const launch = {
 
 launchesMap.set(launch.flightNumber, launch)
 
-// logger(`launches.model.js => Launches: ${launchesMap}`)
-
 function getAllLaunches() {
   const jsonCompatibleListOfLaunches = Array.from(launchesMap.values())
   return jsonCompatibleListOfLaunches
 }
 
+/**
+ *
+ * @param newLaunch - required fields and example below:
+  * {
+      "mission": "Kepler Explorer",
+      "rocket": "Explorer IS1",
+      "launchDate": "Dec 30, 2099",
+      "destination": "Kepler-442 z",
+  }
+ */
+function addNewLaunch(newLaunch) {
+  currentFlightNumber++
+  launchesMap.set(currentFlightNumber, {
+    ...newLaunch,
+    upcoming: true,
+    success: true,
+    customer: [],
+    flightNumber: currentFlightNumber,
+  })
+}
+
 module.exports = {
   launchesMap,
   getAllLaunches,
+  addNewLaunch,
 }

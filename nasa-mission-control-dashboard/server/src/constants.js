@@ -1,5 +1,6 @@
 const URI_PATHS = {
   PLANETS: '/planets',
+  LAUNCHES: '/launches',
 }
 
 const HTTP_STATUS_CODES = {
