@@ -58,7 +58,12 @@ const planetsModelMain = async () => {
   await getAndParsePlanetsData('kepler_data.csv')
 }
 
+function getAllPlanets() {
+  return habitablePlanets
+}
+
 module.exports = {
   planetsModelMain,
   planets: habitablePlanets,
+  getAllPlanets,
 }
