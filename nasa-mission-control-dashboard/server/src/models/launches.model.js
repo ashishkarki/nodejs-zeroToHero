@@ -39,10 +39,38 @@ function addNewLaunch(newLaunch) {
     customer: [],
     flightNumber: currentFlightNumber,
   })
+
+  return launchesMap.get(currentFlightNumber)
+}
+
+function deleteLaunchById(id) {
+  console.log(`Deleting launch with id ${id}: `, launchesMap.get(id))
+
+  const abortedLaunch = launchesMap.get(id)
+  abortedLaunch.upcoming = false
+  abortedLaunch.success = false
+  currentFlightNumber--
+
+  return abortedLaunch
+}
+
+function doesLaunchByIdExist(id) {
+  return launchesMap.has(id)
+}
+
+function updateLaunchById(id, update) {
+  const updatedLaunch = {
+    ...launchesMap.get(id),
+    ...update,
+  }
+
+  launchesMap.set(id, updatedLaunch)
 }
 
 module.exports = {
   launchesMap,
   getAllLaunches,
   addNewLaunch,
+  deleteLaunchById,
+  doesLaunchByIdExist,
 }

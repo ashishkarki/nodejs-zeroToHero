@@ -1,5 +1,10 @@
 const { HTTP_STATUS_CODES } = require('../../constants')
-const { getAllLaunches, addNewLaunch } = require('../../models/launches.model')
+const {
+  getAllLaunches,
+  addNewLaunch,
+  deleteLaunchById,
+  doesLaunchByIdExist,
+} = require('../../models/launches.model')
 
 function httpGetAllLaunches(req, res) {
   const launches = getAllLaunches()
@@ -8,6 +13,19 @@ function httpGetAllLaunches(req, res) {
     count: launches.length,
     launches,
   })
+}
+
+function httpGetLaunchById(req, res) {
+  const id = +req.params.id
+
+  if (!doesLaunchByIdExist(id)) {
+    return res
+      .status(HTTP_STATUS_CODES.NOT_FOUND)
+      .send(`Launch with id ${id} not found.`)
+  }
+
+  const launch = getAllLaunches().find((launch) => launch.flightNumber === id)
+  return res.status(HTTP_STATUS_CODES.OK).json(launch)
 }
 
 function httpAddNewLaunch(req, res) {
@@ -38,12 +56,27 @@ function httpAddNewLaunch(req, res) {
       .send('Invalid Launch input!!. Please provide a valid launchDate.')
   }
 
-  addNewLaunch(nuLaunchPart)
+  const newLaunch = addNewLaunch(nuLaunchPart)
 
-  return res.status(HTTP_STATUS_CODES.CREATED).json(nuLaunchPart)
+  return res.status(HTTP_STATUS_CODES.CREATED).json(newLaunch)
+}
+
+function httpAbortLaunch(req, res) {
+  const idToDelete = +req.params.id
+
+  if (!doesLaunchByIdExist(idToDelete)) {
+    return res
+      .status(HTTP_STATUS_CODES.NOT_FOUND)
+      .send(`Launch with id ${idToDelete} not found.`)
+  } else {
+    const abortedLaunch = deleteLaunchById(idToDelete)
+    return res.status(HTTP_STATUS_CODES.OK).json(abortedLaunch)
+  }
 }
 
 module.exports = {
   httpGetAllLaunches,
+  httpGetLaunchById,
   httpAddNewLaunch,
+  httpAbortLaunch,
 }
