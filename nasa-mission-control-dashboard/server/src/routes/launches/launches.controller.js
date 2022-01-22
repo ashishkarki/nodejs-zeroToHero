@@ -4,6 +4,7 @@ const {
   addNewLaunch,
   deleteLaunchById,
   doesLaunchByIdExist,
+  updateLaunchById,
 } = require('../../models/launches.model')
 
 function httpGetAllLaunches(req, res) {
@@ -74,9 +75,25 @@ function httpAbortLaunch(req, res) {
   }
 }
 
+function httpUpdateLaunch(req, res) {
+  const idToUpdate = +req.params.id
+
+  if (!doesLaunchByIdExist(idToUpdate)) {
+    return res
+      .status(HTTP_STATUS_CODES.NOT_FOUND)
+      .send(`Launch with id ${idToUpdate} not found.`)
+  }
+
+  const launchToUpdate = req.body || {}
+  const updatedLaunch = updateLaunchById(idToUpdate, launchToUpdate)
+
+  return res.status(HTTP_STATUS_CODES.OK).json(updatedLaunch)
+}
+
 module.exports = {
   httpGetAllLaunches,
   httpGetLaunchById,
   httpAddNewLaunch,
   httpAbortLaunch,
+  httpUpdateLaunch,
 }

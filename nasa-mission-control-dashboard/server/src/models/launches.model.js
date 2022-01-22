@@ -65,6 +65,8 @@ function updateLaunchById(id, update) {
   }
 
   launchesMap.set(id, updatedLaunch)
+
+  return updatedLaunch
 }
 
 module.exports = {
@@ -73,4 +75,5 @@ module.exports = {
   addNewLaunch,
   deleteLaunchById,
   doesLaunchByIdExist,
+  updateLaunchById,
 }

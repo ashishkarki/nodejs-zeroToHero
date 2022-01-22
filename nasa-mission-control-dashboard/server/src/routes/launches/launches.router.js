@@ -5,6 +5,7 @@ const {
   httpGetLaunchById,
   httpAddNewLaunch,
   httpAbortLaunch,
+  httpUpdateLaunch,
 } = require('./launches.controller')
 
 // the router
@@ -15,5 +16,6 @@ launchesRouter.get('/', httpGetAllLaunches)
 launchesRouter.get('/:id', httpGetLaunchById)
 launchesRouter.post('/', httpAddNewLaunch)
 launchesRouter.delete('/:id', httpAbortLaunch)
+launchesRouter.put('/:id', httpUpdateLaunch)
 
 module.exports = launchesRouter
