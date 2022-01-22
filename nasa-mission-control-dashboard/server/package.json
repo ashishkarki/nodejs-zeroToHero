@@ -1,0 +1,25 @@
+{
+  "name": "nasa-mission-control-dashboard-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon"
+  },
+  "keywords": [
+    "node",
+    "express",
+    "api",
+    "nasa"
+  ],
+  "author": "ashish k",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "csv-parse": "^5.0.4",
+    "dotenv": "^14.2.0",
+    "express": "^4.17.2",
+    "morgan": "^1.10.0"
+  }
+}
