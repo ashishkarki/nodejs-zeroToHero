@@ -41,9 +41,7 @@ function httpAddNewLaunch(req, res) {
   ) {
     return res
       .status(HTTP_STATUS_CODES.BAD_REQUEST)
-      .send(
-        'Invalid Launch input!!. Please provide mission, rocket, launchDate & destination fields.',
-      )
+      .json({ error: 'Missing required fields.' })
   }
 
   nuLaunchPart.launchDate = new Date(nuLaunchPart.launchDate)
@@ -54,7 +52,7 @@ function httpAddNewLaunch(req, res) {
     // means the new Date contructor couldn't parse the date string
     return res
       .status(HTTP_STATUS_CODES.BAD_REQUEST)
-      .send('Invalid Launch input!!. Please provide a valid launchDate.')
+      .json({ error: 'Invalid launch date.' })
   }
 
   const newLaunch = addNewLaunch(nuLaunchPart)
