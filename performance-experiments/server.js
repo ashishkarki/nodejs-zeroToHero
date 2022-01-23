@@ -28,7 +28,7 @@ app.get('/', (req, res) => {
 
 app.get('/timers', (req, res) => {
   delay(9000)
-  res.send(`Tring Tring..Timer/s done with process id: ${process.pid}`)
+  res.send(`Tring Tring PM2 v2..Timer/s done with process id: ${process.pid}`)
 })
 
 // if using pm2, clustering is built in, so no need to check isMaster etc
@@ -46,7 +46,7 @@ app.get('/timers', (req, res) => {
 // const workerId = cluster.worker.id
 // console.log(`Worker ${process.pid} is running`)
 
-app.listen(3000, () => {
-  console.log('Worker  listening on port 3000')
+app.listen(3010, () => {
+  console.log('Worker  listening on port 3010')
 })
 // }
