@@ -4,12 +4,22 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "pm2:start": "pm2 start $npm_config_file --name $npm_config_appname",
+    "pm2:start-i": "pm2 start $npm_config_file --name $npm_config_appname -i $npm_config_instances",
+    "pm2:start-max": "pm2 start $npm_config_file --name $npm_config_appname -i max",
+    "pm2:list": "pm2 list",
+    "pm2:logs": "pm2 logs",
+    "pm2:stop": "pm2 stop $npm_config_appname",
+    "pm2:stop-all": "pm2 stop all",
+    "pm2:restart": "pm2 restart $npm_config_appname",
+    "pm2:delete": "pm2 delete $npm_config_appname",
+    "pm2:delete-all": "pm2 delete all"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.17.2"
+    "express": "^4.17.2",
+    "pm2": "^5.1.2"
   }
 }
