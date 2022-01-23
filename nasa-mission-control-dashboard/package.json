@@ -10,6 +10,7 @@
     "client-build": "npm run build --prefix client",
     "dev": "npm run server & npm run client",
     "deploy": "npm run client-build && npm run server",
+    "deploy-cluster": "npm run build --prefix client && npm run cluster --prefix server",
     "test": "npm test --prefix server && npm test --prefix client"
   },
   "keywords": ["full-stack", "node", "backend", "api"],
