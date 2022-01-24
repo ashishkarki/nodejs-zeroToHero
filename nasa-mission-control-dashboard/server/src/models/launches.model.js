@@ -1,3 +1,5 @@
+const launchesModel = require('./launches.mongo')
+
 const launchesMap = new Map()
 
 let currentFlightNumber = 100
@@ -8,7 +10,7 @@ const launch = {
   rocket: 'Explorer IS1',
   launchDate: new Date('Dec 30, 2023'),
   destination: 'Kepler-442 z',
-  customer: ['NASA', 'KASA', 'Explorer Net Org'],
+  customers: ['NASA', 'KASA', 'Explorer Net Org'],
   upcoming: true, // false once it is launched
   success: true, // false if it failed
 }

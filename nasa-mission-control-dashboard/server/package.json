@@ -7,7 +7,9 @@
     "start": "node src/server.js",
     "dev": "nodemon",
     "test": "jest --watchAll",
-    "cluster": "pm2 start ./src/server.js -i max"
+    "cluster": "pm2 start ./src/server.js -i 2",
+    "reload": "pm2 reload",
+    "pm2:auto": "pm2 startOrReload ecosystem.config.js"
   },
   "keywords": [
     "node",
@@ -22,8 +24,8 @@
     "csv-parse": "^5.0.4",
     "dotenv": "^14.2.0",
     "express": "^4.17.2",
-    "morgan": "^1.10.0",
-    "pm2": "^5.1.2"
+    "mongoose": "^6.1.7",
+    "morgan": "^1.10.0"
   },
   "devDependencies": {
     "jest": "^27.4.7",
