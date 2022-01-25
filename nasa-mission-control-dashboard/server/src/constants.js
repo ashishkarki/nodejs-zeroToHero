@@ -14,6 +14,8 @@ const HTTP_STATUS_CODES = {
   INTERNAL_SERVER_ERROR: 500,
 }
 
+const DEFAULT_FLIGHT_NUMBER = 100
+
 const logger = (...messages) => {
   if (
     process.env.NODE_ENV !== 'prod' ||
@@ -26,5 +28,6 @@ const logger = (...messages) => {
 module.exports = {
   URI_PATHS,
   HTTP_STATUS_CODES,
+  DEFAULT_FLIGHT_NUMBER,
   logger,
 }

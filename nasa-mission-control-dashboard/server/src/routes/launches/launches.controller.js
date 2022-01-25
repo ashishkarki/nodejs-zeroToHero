@@ -1,14 +1,15 @@
 const { HTTP_STATUS_CODES } = require('../../constants')
 const {
   getAllLaunches,
-  addNewLaunch,
+  // addNewLaunch,
+  scheduleNewLaunch,
   deleteLaunchById,
   doesLaunchByIdExist,
   updateLaunchById,
 } = require('../../models/launches.model')
 
-function httpGetAllLaunches(req, res) {
-  const launches = getAllLaunches()
+async function httpGetAllLaunches(req, res) {
+  const launches = await getAllLaunches()
 
   return res.status(HTTP_STATUS_CODES.OK).json({
     count: launches.length,
@@ -29,7 +30,7 @@ function httpGetLaunchById(req, res) {
   return res.status(HTTP_STATUS_CODES.OK).json(launch)
 }
 
-function httpAddNewLaunch(req, res) {
+async function httpAddNewLaunch(req, res) {
   const nuLaunchPart = req.body
 
   // validate newLaunchPartial
@@ -55,7 +56,7 @@ function httpAddNewLaunch(req, res) {
       .json({ error: 'Invalid launch date.' })
   }
 
-  const newLaunch = addNewLaunch(nuLaunchPart)
+  const newLaunch = await scheduleNewLaunch(nuLaunchPart)
 
   return res.status(HTTP_STATUS_CODES.CREATED).json(newLaunch)
 }
