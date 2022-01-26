@@ -58,19 +58,32 @@ async function httpAddNewLaunch(req, res) {
 
   const newLaunch = await scheduleNewLaunch(nuLaunchPart)
 
+  console.log(
+    `launches.controller => httpAddNewLaunch => New launch: ${newLaunch}`,
+  )
   return res.status(HTTP_STATUS_CODES.CREATED).json(newLaunch)
 }
 
-function httpAbortLaunch(req, res) {
+async function httpAbortLaunch(req, res) {
   const idToDelete = +req.params.id
 
-  if (!doesLaunchByIdExist(idToDelete)) {
+  const existsLaunch = await doesLaunchByIdExist(idToDelete)
+  if (!existsLaunch) {
     return res
       .status(HTTP_STATUS_CODES.NOT_FOUND)
       .send(`Launch with id ${idToDelete} not found.`)
   } else {
-    const abortedLaunch = deleteLaunchById(idToDelete)
-    return res.status(HTTP_STATUS_CODES.OK).json(abortedLaunch)
+    const didLaunchAbort = await deleteLaunchById(idToDelete)
+
+    if (didLaunchAbort) {
+      return res.status(HTTP_STATUS_CODES.OK).json({
+        message: `Launch with id ${idToDelete} aborted.`,
+      })
+    } else {
+      return res
+        .status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR)
+        .json({ message: `Could not abort launch with id ${idToDelete}.` })
+    }
   }
 }
 

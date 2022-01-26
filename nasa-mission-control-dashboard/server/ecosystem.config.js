@@ -3,7 +3,7 @@ module.exports = {
     {
       name: 'nasa-api',
       script: './src/server.js',
-      instances: '2',
+      instances: '1',
       watch: true,
       ignore_watch: ['node_modules', 'logs'],
     },

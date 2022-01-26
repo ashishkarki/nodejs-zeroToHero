@@ -2,10 +2,6 @@ const { DEFAULT_FLIGHT_NUMBER } = require('../constants')
 const launchesModel = require('./launches.mongo')
 const planetsModel = require('./planets.mongo')
 
-const launchesMap = new Map()
-
-// let currentFlightNumber = 100
-
 const launch = {
   flightNumber: DEFAULT_FLIGHT_NUMBER,
   mission: 'Kepler Explorer',
@@ -19,12 +15,8 @@ const launch = {
 
 // save a default hard-coded launch
 saveLaunch(launch)
-//  launchesMap.set(launch.flightNumber, launch)
 
 async function getAllLaunches() {
-  // const jsonCompatibleListOfLaunches = Array.from(launchesMap.values())
-  // return jsonCompatibleListOfLaunches
-
   return await launchesModel.find(
     {},
     {
@@ -35,6 +27,7 @@ async function getAllLaunches() {
 }
 
 async function saveLaunch(launch) {
+  // first check if the 'Planet' exists
   const planetForThisLaunch = await planetsModel.findOne({
     kepler_name: launch.destination,
   })
@@ -43,30 +36,59 @@ async function saveLaunch(launch) {
     throw new Error(`Planet with kepler_name: ${launch.destination} not found.`)
   }
 
-  return await launchesModel.updateOne(
-    {
-      // 1. find using this criteria
+  // then check if the 'Launch' exists
+  let findOneClause = {
+    mission: launch.mission,
+  }
+  if (launch.flightNumber) {
+    findOneClause = {
+      ...findOneClause,
       flightNumber: launch.flightNumber,
-    },
-    launch,
-    // {
-    //   // 2. update with this criteria
-    //   $set: {
-    //     flightNumber: launch.flightNumber,
-    //     mission: launch.mission,
-    //     rocket: launch.rocket,
-    //     launchDate: launch.launchDate,
-    //     destination: launch.destination,
-    //     customers: launch.customers,
-    //     upcoming: launch.upcoming,
-    //     success: launch.success,
-    //   },
-    // },
-    {
-      // 3. means an update that inserts a new document if no document matches the filter
-      upsert: true,
-    },
-  )
+    }
+  }
+
+  const foundLaunch = await launchesModel.findOne(findOneClause)
+
+  if (foundLaunch) {
+    console.log(
+      `Found existing launch with flightNumber: ${launch.flightNumber}`,
+    )
+
+    const savedLaunch = await launchesModel.updateOne(
+      // {
+      //   // 1. find using this criteria
+      //   flightNumber: Number(launch.flightNumber),
+      //   mission: launch.mission,
+      // },
+      // 2. update with this criteria
+      {
+        ...launch,
+        // flightNumber: newFlightNumber,
+      },
+      // {
+      //   // 3. means an update that inserts a new document if no document matches the filter
+      //   upsert: true,
+      // },
+    )
+
+    console.log(
+      `launches.model => saveLaunch() => Saved new launch: ${savedLaunch}`,
+    )
+    return savedLaunch
+  } else {
+    console.log(`No existing launch with flightNumber: ${launch.flightNumber}`)
+
+    const newFlightNumber = (await getLatestFlightNumber()) + 1
+
+    console.log(`New flightNumber: ${newFlightNumber}`)
+    console.log(`New launch: ${JSON.stringify(launch)}`)
+    const newlyCreatedLaunch = await launchesModel.create({
+      ...launch,
+      flightNumber: newFlightNumber,
+    })
+
+    return newlyCreatedLaunch
+  }
 }
 
 /**
@@ -79,45 +101,45 @@ async function saveLaunch(launch) {
       "destination": "Kepler-442 z",
   }
  */
-// function addNewLaunch(newLaunch) {
-//   currentFlightNumber++
-//   launchesMap.set(currentFlightNumber, {
-//     ...newLaunch,
-//     upcoming: true,
-//     success: true,
-//     customer: [],
-//     flightNumber: currentFlightNumber,
-//   })
-
-//   return launchesMap.get(currentFlightNumber)
-// }
 async function scheduleNewLaunch(launch) {
-  const newFlightNumber = (await getLatestFlightNumber()) + 1
+  // const newFlightNumber = (await getLatestFlightNumber()) + 1
 
   const newLaunch = {
     ...launch,
     upcoming: true,
     success: true,
     customers: [],
-    flightNumber: newFlightNumber,
+    // flightNumber: DEFAULT_FLIGHT_NUMBER,
   }
 
-  return await saveLaunch(newLaunch)
+  const savedLaunch = await saveLaunch(newLaunch)
+  console.log(
+    `launches.model => scheduleNewLaunch() => Saved new launch: ${savedLaunch}`,
+  )
+  return savedLaunch
 }
 
-function deleteLaunchById(id) {
-  console.log(`Deleting launch with id ${id}: `, launchesMap.get(id))
+async function deleteLaunchById(id) {
+  const updatedLaunch = await launchesModel.updateOne(
+    {
+      flightNumber: Number(id),
+    },
+    {
+      upcoming: false,
+      success: false,
+    },
+  )
 
-  const abortedLaunch = launchesMap.get(id)
-  abortedLaunch.upcoming = false
-  abortedLaunch.success = false
-  currentFlightNumber--
-
-  return abortedLaunch
+  return updatedLaunch.modifiedCount === 1
 }
 
-function doesLaunchByIdExist(id) {
-  return launchesMap.has(id)
+async function doesLaunchByIdExist(id) {
+  // return launchesMap.has(id)
+  const foundLaunch = await launchesModel.findOne({
+    flightNumber: Number(id),
+  })
+
+  return !!foundLaunch
 }
 
 async function getLatestFlightNumber() {
@@ -145,9 +167,7 @@ function updateLaunchById(id, update) {
 }
 
 module.exports = {
-  // launchesMap,
   getAllLaunches,
-  // addNewLaunch,
   scheduleNewLaunch,
   deleteLaunchById,
   doesLaunchByIdExist,
